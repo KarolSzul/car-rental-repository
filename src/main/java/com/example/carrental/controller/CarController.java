@@ -20,8 +20,13 @@ public class CarController {
 
     @GetMapping
     public List<CarModel> getCars() {
-//    return new CarModel(1L, "sdsad", "sadasd", "asdasd", "sadas",123, 21312,123, List.of(), null); // sprawdzenie
+
         return carService.getAllCars();
+    }
+
+    @GetMapping("/available")
+    public List<CarModel> getAllAvailableCars(@RequestBody LocalDate startDate, @RequestBody LocalDate endDate) {
+        return carService.displayAllAvailableCars(startDate, endDate);
     }
 
 
