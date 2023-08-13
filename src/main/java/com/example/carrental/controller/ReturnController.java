@@ -4,6 +4,7 @@ import com.example.carrental.DTO.ReturnDTO;
 import com.example.carrental.model.BookingModel;
 import com.example.carrental.model.ReturnModel;
 import com.example.carrental.repository.ReservationRepository;
+import com.example.carrental.service.BillingService;
 import com.example.carrental.service.ReturnService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,8 @@ import java.util.List;
 public class ReturnController {
 
     private final ReturnService returnService;
+
+    private final BillingService billingService;
     private final ReservationRepository reservationRepository;
 
     @GetMapping
@@ -39,7 +42,10 @@ public class ReturnController {
         returnService.editReturn(returnDTO, returnModel);
     }
 
-
+    @GetMapping("/getcost/{id}")
+    public Double getTotalCostOfRenting(@PathVariable("id") Long id) {
+        return billingService.getFinalCost(id);
+    }
 
 
 }
