@@ -5,7 +5,6 @@ import lombok.*;
 
 
 import java.time.LocalDate;
-import java.util.Date;
 
 
 @Entity
@@ -42,7 +41,7 @@ public class ReservationModel {
 
     @OneToOne
     @JoinColumn(name = "start_department_id")
-    private DepartmentModel startDepartmentModel;  // czy odwołuję się do CarModel?  nazwa zmiennej?
+    private DepartmentModel startDepartmentModel;
 
 
     @OneToOne
@@ -51,10 +50,12 @@ public class ReservationModel {
 
 
     @OneToOne
+    @Embedded
     private BookingModel bookingModel;
 
 
     @OneToOne
+    @Embedded
     private ReturnModel returnModel;
 
 

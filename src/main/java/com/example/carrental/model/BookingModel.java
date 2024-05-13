@@ -12,12 +12,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Embeddable
 public class BookingModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @OneToOne
     @JoinColumn (name = "employee_model")
@@ -25,7 +25,6 @@ public class BookingModel {
 
     @Column (name = "booking_start_day")
     private LocalDate bookingStartDay;
-
 
     @Column(name = "comments")
     private String comments;

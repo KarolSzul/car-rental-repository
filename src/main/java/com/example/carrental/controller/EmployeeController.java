@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/employee")
+@RequestMapping(value = "/employees")
 @RequiredArgsConstructor
 public class EmployeeController {
 
@@ -26,6 +26,11 @@ public class EmployeeController {
         return employeeService.getAllEmployees();
     }
 
+    @GetMapping("/{id}")
+    public EmployeeModel getEmployeeById(Long id) {
+        return employeeService.getEmployeeModelById(id);
+    }
+
     @PostMapping
     public void addEmployee(@RequestBody EmployeeDTO employeeDTO){
         employeeService.addEmployee(employeeDTO);
@@ -36,7 +41,7 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
     }
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public void editEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDTO employeeDTO){
         EmployeeModel employeeModel = employeeService.getEmployeeModelById(id);
         employeeService.editEmployee(employeeDTO, employeeModel);

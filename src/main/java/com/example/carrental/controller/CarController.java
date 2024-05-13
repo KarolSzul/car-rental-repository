@@ -1,10 +1,12 @@
 package com.example.carrental.controller;
 
 import com.example.carrental.DTO.CarDTO;
+import com.example.carrental.mapper.CarMapper;
 import com.example.carrental.model.CarModel;
 import com.example.carrental.model.CarStatus;
 import com.example.carrental.service.CarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/car")
+@RequestMapping(value = "/cars")
 @RequiredArgsConstructor
 public class CarController {
 
@@ -25,7 +27,9 @@ public class CarController {
     }
 
     @GetMapping("/available")
-    public List<CarModel> getAllAvailableCars(@RequestBody LocalDate startDate, @RequestBody LocalDate endDate) {
+    public List<CarModel> getAllAvailableCars(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return carService.displayAllAvailableCars(startDate, endDate);
     }
 
@@ -41,7 +45,7 @@ public class CarController {
     }
 
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public void editCar(@PathVariable("id") Long id, @RequestBody CarDTO carDTO){
     CarModel carModel = carService.getCarModelById(id);
     carService.editCar(carDTO, carModel);

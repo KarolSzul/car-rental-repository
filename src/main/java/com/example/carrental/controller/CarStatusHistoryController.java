@@ -13,27 +13,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarStatusHistoryController {
 
-    private final CarStatusHistoryService carSatusHistoryService;
+    private final CarStatusHistoryService carStatusHistoryService;
 
     @GetMapping("/{id}")
     public List<CarStatusHistoryModel> getCarStatusHistoryForASingleCar (@PathVariable Long id) {
-        return carSatusHistoryService.getCarStatusHistory(id);
+        return carStatusHistoryService.getCarStatusHistory(id);
     }
 
     @PostMapping
     public void addCarStatusHistory (@RequestBody CarStatusHistoryDTO carStatusHistoryDTO) {
-        carSatusHistoryService.addCarStatusHistoryRecord(carStatusHistoryDTO);
+        carStatusHistoryService.addCarStatusHistoryRecord(carStatusHistoryDTO);
     }
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public void editCarStatusHistory (@PathVariable Long id, CarStatusHistoryDTO carStatusHistoryDTO) {
-        CarStatusHistoryModel carStatusHistoryModel = carSatusHistoryService.getCarStatusHistoryRecord(id);
-        carSatusHistoryService.editCarStatusHistoryRecord(carStatusHistoryDTO, carStatusHistoryModel);
+        CarStatusHistoryModel carStatusHistoryModel = carStatusHistoryService.getCarStatusHistoryRecord(id);
+        carStatusHistoryService.editCarStatusHistoryRecord(carStatusHistoryDTO, carStatusHistoryModel);
     }
 
     @DeleteMapping("/{id}")
     public void deleteCarStatusHistory (@PathVariable Long id) {
-        carSatusHistoryService.deleteCarStatusHistoryRecord(id);
+        carStatusHistoryService.deleteCarStatusHistoryRecord(id);
     }
 
 

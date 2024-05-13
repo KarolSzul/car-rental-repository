@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/reservation")
+@RequestMapping(value = "/reservations")
 public class ReservationController {
 
 
@@ -30,6 +30,10 @@ public class ReservationController {
         return reservationService.getAllReservation();
     }
 
+    @GetMapping("/{id}")
+    public List<ReservationModel> getReservationsOfAGivenCustomer (@PathVariable("id") Long id) {
+        return reservationRepository.getReservationModelByCustomerId(id);
+    }
 
     @PostMapping
     public void addReservation(@RequestBody ReservationDTO reservationDTO) {
@@ -48,17 +52,14 @@ public class ReservationController {
     }
 
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public void editReservation(@PathVariable("id") Long id, @RequestBody ReservationDTO reservationDTO){
         ReservationModel reservationModel = reservationService.getAllReservation().get(Math.toIntExact(id));
         reservationService.editReservation(reservationDTO,reservationModel);
 
     }
 
-    @GetMapping("/myresevations/{id}")
-    public List<ReservationModel> getReservationsOfAGivenCustomer (@PathVariable("id") Long id) {
-    return reservationRepository.getReservationModelByCustomerId(id);
-    }
+
 
 
 }

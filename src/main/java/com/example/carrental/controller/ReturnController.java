@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/return")
+@RequestMapping("/returns")
 public class ReturnController {
 
     private final ReturnService returnService;
@@ -36,7 +36,7 @@ public class ReturnController {
     @DeleteMapping("/{id}")
     public void deleteReturnById(@PathVariable("id") Long id) { returnService.deleteReturn(id); }
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public void editReturn(@PathVariable("id") Long id,@RequestBody ReturnDTO returnDTO) {
         ReturnModel returnModel = returnService.getReturnModelById(id);
         returnService.editReturn(returnDTO, returnModel);

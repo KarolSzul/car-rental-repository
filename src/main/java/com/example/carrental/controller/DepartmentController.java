@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/department")
+@RequestMapping(value = "/departments")
 @RequiredArgsConstructor
 public class DepartmentController {
 
@@ -21,6 +21,11 @@ public class DepartmentController {
     @GetMapping
     public List<DepartmentModel> getDepartments(){
         return departmentService.getAllDepartments();
+    }
+
+    @GetMapping("/{id}")
+    public DepartmentModel getDepartmentById(@PathVariable Long id){
+        return departmentService.getDepartmentModelById(id);
     }
 
     @PostMapping
@@ -33,7 +38,7 @@ public class DepartmentController {
         departmentService.deleteDepartment(id);
     }
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public void editDepartment(@PathVariable("id") Long id, @RequestBody DepartmentDTO departmentDTO){
         DepartmentModel departmentModel = departmentService.getDepartmentModelById(id);
         departmentService.editDepartment(departmentDTO, departmentModel);

@@ -24,7 +24,6 @@ public class CustomerService {
         CustomerModel newCustomer = new CustomerModel();
         customerMapper.customerDtoToCustomerModel(customerDTO,newCustomer);
         customerRepository.save(newCustomer);
-
     }
 
     public void deleteCustomerById(Long id) {

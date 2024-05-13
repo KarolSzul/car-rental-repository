@@ -77,7 +77,7 @@ public class CarService {
             }
         }
         return allAvilableCarsList;
-    } // zrobić CONTROLLER
+    }
 
 
 
