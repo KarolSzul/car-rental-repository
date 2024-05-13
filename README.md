@@ -8,4 +8,4 @@ Maven,
 MySQL.
 
 
-The relations between tables is shown in the diagram in the main folder. The file name is car-rental-diagram.
+The relations between tables is shown in the diagram in the main folder. The file name is car-rental-diagram.drawio.
