@@ -1,4 +1,4 @@
-A project of an application for a car rental based on a model-view-controller architecture.
+A project of an application for a car rental based on a model-service-controller architecture.
 
 Technlogies used:
 
