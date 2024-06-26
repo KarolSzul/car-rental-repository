@@ -1,16 +1,13 @@
 package com.example.carrental.repository;
 
-import com.example.carrental.model.CarStatusHistoryModel;
+import com.example.carrental.repository.model.CarStatusHistoryModel;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface CarStatusHistoryRepository extends JpaRepository<CarStatusHistoryModel, Long> {
+public interface CarStatusHistoryRepository extends JpaRepository<CarStatusHistoryModel, UUID> {
 
-//    @Query("select c from CarStatusHistoryModel  c where c.endDate > CURRENT DATE")
-//    List<CarStatusHistoryModel> findAllCarStatusHistoryModelsInTheFuture();
 
 }

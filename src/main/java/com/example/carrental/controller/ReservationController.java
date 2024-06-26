@@ -1,16 +1,21 @@
 package com.example.carrental.controller;
 
-import com.example.carrental.DTO.CarStatusHistoryDTO;
-import com.example.carrental.DTO.ReservationDTO;
-import com.example.carrental.model.CarStatus;
-import com.example.carrental.model.ReservationModel;
+import com.example.carrental.controller.DTO.CarStatusHistoryDTO;
+import com.example.carrental.controller.DTO.ReservationDTO;
+import com.example.carrental.controller.validation.ReservationDTOValidator;
+import com.example.carrental.repository.model.CarStatus;
+import com.example.carrental.repository.model.ReservationModel;
 import com.example.carrental.repository.ReservationRepository;
 import com.example.carrental.service.CarStatusHistoryService;
 import com.example.carrental.service.ReservationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,41 +26,55 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final CarStatusHistoryService carStatusHistoryService;
-    private final ReservationRepository reservationRepository;
+    private final ReservationDTOValidator reservationDTOValidator;
 
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(reservationDTOValidator);
+    }
 
-
-    @GetMapping
-    public List<ReservationModel> getReservations() {
+    @GetMapping("/getall")
+    public List<ReservationDTO> getReservations() {
         return reservationService.getAllReservation();
     }
 
-    @GetMapping("/{id}")
-    public List<ReservationModel> getReservationsOfAGivenCustomer (@PathVariable("id") Long id) {
-        return reservationRepository.getReservationModelByCustomerId(id);
+    @GetMapping("/get/{id}")
+    public ReservationDTO getReservationById(@PathVariable ("id") UUID id) {
+        return reservationService.getReservationById(id);
     }
 
-    @PostMapping
-    public void addReservation(@RequestBody ReservationDTO reservationDTO) {
-        reservationService.addReservation(reservationDTO);
+    @GetMapping("/customer/{id}")
+    public List<ReservationDTO> getReservationsOfAGivenCustomer (@PathVariable("id") UUID id) {
+        return reservationService.getReservationsOfAGivenCustomer(id);
+    }
+
+    @PostMapping("/add")
+    public UUID addReservation(@Valid @RequestBody ReservationDTO reservationDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid data input");
+        }
         CarStatusHistoryDTO carStatusHistoryDTO =
                 new CarStatusHistoryDTO(reservationDTO.getReservationStartDate()
                         , reservationDTO.getReservationEndDate(), CarStatus.RESERVED, reservationDTO.getCarModel());
         carStatusHistoryService.addCarStatusHistoryRecord(carStatusHistoryDTO);
+        return reservationService.addReservation(reservationDTO);
+
     }
 
 
 
-    @DeleteMapping("/{id}")
-    public void deleteReservationById(@PathVariable("id") Long id) {
-        reservationService.deleteReservation(id);
+    @DeleteMapping("/delete/{id}")
+    public UUID deleteReservationById(@PathVariable("id") UUID id) {
+        return reservationService.deleteReservation(id);
     }
 
 
-    @PutMapping("/{id}")
-    public void editReservation(@PathVariable("id") Long id, @RequestBody ReservationDTO reservationDTO){
-        ReservationModel reservationModel = reservationService.getAllReservation().get(Math.toIntExact(id));
-        reservationService.editReservation(reservationDTO,reservationModel);
+    @PutMapping("/edit/{id}")
+    public UUID editReservation(@PathVariable("id") UUID id, @Valid @RequestBody ReservationDTO reservationDTO,
+                                BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid data input");
+        }
+        return reservationService.editReservation(reservationDTO,id);
 
     }
 

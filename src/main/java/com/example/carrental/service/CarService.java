@@ -1,18 +1,18 @@
 package com.example.carrental.service;
 
-import com.example.carrental.DTO.CarDTO;
-import com.example.carrental.mapper.CarMapper;
-import com.example.carrental.model.*;
+import com.example.carrental.controller.DTO.CarDTO;
+import com.example.carrental.repository.model.CarModel;
+import com.example.carrental.repository.model.CarStatus;
+import com.example.carrental.repository.model.CarStatusHistoryModel;
+import com.example.carrental.service.mapper.CarMapper;
 import com.example.carrental.repository.CarRepository;
-import com.example.carrental.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,61 +23,71 @@ public class CarService {
     private final CarMapper carMapper;
 
 
-    public void addCar(CarDTO carDTO) {
+    public UUID addCar(CarDTO carDTO) {
         CarModel newCar = new CarModel();
         carMapper.carDTOToCarModel(carDTO, newCar);
         carRepository.save(newCar);
+        return newCar.getId();
     }
 
-    public void deleteCar(Long id) {
+    public UUID deleteCar(UUID id) {
         carRepository.deleteById(id);
+        return id;
     }
 
-    public void editCar(CarDTO carDTO, CarModel editedCarModel) {
-        carMapper.carDTOToCarModel(carDTO, editedCarModel);
-        carRepository.save(editedCarModel);
+    public UUID editCar(UUID id, CarDTO carDTO) {
+        CarModel carModel = carRepository.findById(id).orElse(null);
+        carMapper.carDTOToCarModel(carDTO, carModel);
+        carRepository.save(carModel);
+        return id;
     }
 
-    public CarStatus getCarStatusOnGivenDay(LocalDate date, CarModel carModel) {
-        List<CarStatusHistoryModel> statusHistoryModelsOfAGivenCar = carModel.getCarStatusHistoryModels();
-        for (CarStatusHistoryModel statusHistoryModelsOfAGivenCarRecord : statusHistoryModelsOfAGivenCar) {
-            if (date.isAfter(statusHistoryModelsOfAGivenCarRecord.getStartDate()) && date.isAfter(statusHistoryModelsOfAGivenCarRecord.getEndDate())) {
-                return statusHistoryModelsOfAGivenCarRecord.getCarStatus();
+    public CarStatus getCarStatusOnGivenDay(LocalDate date, UUID id) {
+        CarModel carModel = carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Wrong id"));
+            List<CarStatusHistoryModel> statusHistoryModelsOfAGivenCar = carModel.getCarStatusHistoryModels();
+            for (CarStatusHistoryModel statusHistoryModelsOfAGivenCarRecord : statusHistoryModelsOfAGivenCar) {
+                if (date.isAfter(statusHistoryModelsOfAGivenCarRecord.getStartDate()) && date.isAfter(statusHistoryModelsOfAGivenCarRecord.getEndDate())) {
+                    return statusHistoryModelsOfAGivenCarRecord.getCarStatus();
+                }
+
             }
 
+            return CarStatus.AVAILABLE;
+    }
+
+    public CarStatus getCarAvailabilityInAGivenPeriod (UUID id, LocalDate startDate, LocalDate endDate) {
+        for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+            if (getCarStatusOnGivenDay(date, id) != CarStatus.AVAILABLE) {
+                return CarStatus.RESERVED;
+            }
         }
         return CarStatus.AVAILABLE;
     }
 
-    public CarModel getCarAvailabilityInAGivenPeriod (CarModel carModel, LocalDate startDate, LocalDate endDate) {
-        for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
-            if (getCarStatusOnGivenDay(date, carModel) != CarStatus.AVAILABLE) {
-                return null;
-            }
-        }
-        return carModel;
+    public List<CarDTO> getAllCars() {
+        return carRepository
+                .findAll()
+                .stream()
+                .map(carMapper::carModelToCarDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<CarModel> getAllCars() {
-        return carRepository.findAll();
-    }
-
-    public CarModel getCarModelById(Long id) {
-        return carRepository.findById(id).orElse(null);
+    public CarDTO getCarDTOById(UUID id) {
+        CarModel carModel = carRepository.findById(id).orElse(null);
+        return carMapper.carModelToCarDTO(carModel);
     }
 
 
 
-    public List<CarModel> displayAllAvailableCars(LocalDate startDate, LocalDate endDate) {
-        List<CarModel> allAvilableCarsList = new ArrayList<>();
-        List<CarModel> allCars = getAllCars();
-        for(CarModel car : allCars) {
-            if(getCarAvailabilityInAGivenPeriod(car,startDate,endDate) != null) {
-                allAvilableCarsList.add(car);
-            }
-        }
-        return allAvilableCarsList;
-    }
+    public List<CarDTO> displayAllAvailableCars(LocalDate startDate, LocalDate endDate) {
+        return carRepository
+                .findAll()
+                .stream()
+                .filter(c -> getCarAvailabilityInAGivenPeriod(c.getId(),startDate,endDate) != null)
+                .map(carMapper::carModelToCarDTO)
+                .collect(Collectors.toList());
+
+    } // czy da się to usprawnić
 
 
 

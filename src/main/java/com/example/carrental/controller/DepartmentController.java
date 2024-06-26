@@ -1,14 +1,14 @@
 package com.example.carrental.controller;
 
 
-import com.example.carrental.DTO.DepartmentDTO;
-import com.example.carrental.model.DepartmentModel;
-import com.example.carrental.service.CarService;
+import com.example.carrental.controller.DTO.DepartmentDTO;
+import com.example.carrental.repository.model.DepartmentModel;
 import com.example.carrental.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/departments")
@@ -18,30 +18,29 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
 
-    @GetMapping
-    public List<DepartmentModel> getDepartments(){
+    @GetMapping("/getall")
+    public List<DepartmentDTO> getDepartments(){
         return departmentService.getAllDepartments();
     }
 
-    @GetMapping("/{id}")
-    public DepartmentModel getDepartmentById(@PathVariable Long id){
-        return departmentService.getDepartmentModelById(id);
+    @GetMapping("/get/{id}")
+    public DepartmentDTO getDepartmentById(@PathVariable UUID id){
+        return departmentService.getDepartmentDTOById(id);
     }
 
-    @PostMapping
-    public void addDepartment(@RequestBody DepartmentDTO departmentDTO) {
-        departmentService.addDepartment(departmentDTO);
+    @PostMapping("/add")
+    public UUID addDepartment(@RequestBody DepartmentDTO departmentDTO) {
+        return departmentService.addDepartment(departmentDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteDepartmentById(@PathVariable("id") Long id) {
-        departmentService.deleteDepartment(id);
+    @DeleteMapping("/delete/{id}")
+    public UUID deleteDepartmentById(@PathVariable("id") UUID id) {
+        return departmentService.deleteDepartment(id);
     }
 
-    @PutMapping("/{id}")
-    public void editDepartment(@PathVariable("id") Long id, @RequestBody DepartmentDTO departmentDTO){
-        DepartmentModel departmentModel = departmentService.getDepartmentModelById(id);
-        departmentService.editDepartment(departmentDTO, departmentModel);
+    @PutMapping("/edit/{id}")
+    public UUID editDepartment(@PathVariable("id") UUID id, @RequestBody DepartmentDTO departmentDTO){
+        return departmentService.editDepartment(departmentDTO, id);
     }
 
 

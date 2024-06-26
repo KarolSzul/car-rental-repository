@@ -1,16 +1,20 @@
 package com.example.carrental.controller;
 
-import com.example.carrental.DTO.EmployeeDTO;
-import com.example.carrental.model.DepartmentModel;
-import com.example.carrental.model.EmployeeModel;
+import com.example.carrental.controller.DTO.EmployeeDTO;
+import com.example.carrental.controller.validation.EmployeeDTOValidator;
+import com.example.carrental.repository.EmployeeRepository;
+import com.example.carrental.repository.model.EmployeeModel;
 import com.example.carrental.service.EmployeeService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.example.carrental.service.mapper.EmployeeMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/employees")
@@ -18,33 +22,43 @@ import java.util.List;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final EmployeeDTOValidator employeeDTOValidator;
 
-    @GetMapping
-    public List<EmployeeModel> getEmployees(){
-        // EmployeeDTO test = new EmployeeDTO("Maciej", "Minorowski", true,null);
-        // employeeService.addEmployee(test);
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(employeeDTOValidator);
+    }
+
+
+    @GetMapping("/getall")
+    public List<EmployeeDTO> getEmployees(){
         return employeeService.getAllEmployees();
     }
 
-    @GetMapping("/{id}")
-    public EmployeeModel getEmployeeById(Long id) {
-        return employeeService.getEmployeeModelById(id);
+    @GetMapping("/get/{id}")
+    public EmployeeDTO getEmployeeById(UUID id) {
+        return employeeService.getEmployeeDTOById(id);
     }
 
-    @PostMapping
-    public void addEmployee(@RequestBody EmployeeDTO employeeDTO){
-        employeeService.addEmployee(employeeDTO);
+    @PostMapping("/add")
+    public UUID addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new IllegalArgumentException("Invalid data input");
+        }
+        return employeeService.addEmployee(employeeDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteEmployeeById(@PathVariable("id") Long id){
-        employeeService.deleteEmployee(id);
+    @DeleteMapping("/delete/{id}")
+    public UUID deleteEmployeeById(@PathVariable("id") UUID id){
+        return employeeService.deleteEmployee(id);
     }
 
-    @PutMapping("/{id}")
-    public void editEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDTO employeeDTO){
-        EmployeeModel employeeModel = employeeService.getEmployeeModelById(id);
-        employeeService.editEmployee(employeeDTO, employeeModel);
+    @PutMapping("/edit/{id}")
+    public UUID editEmployee(@PathVariable("id") UUID id, @Valid @RequestBody EmployeeDTO employeeDTO,
+                             BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Invalid data input");
+        }
+        return employeeService.editEmployee(employeeDTO, id);
     }
 
 

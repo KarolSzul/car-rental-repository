@@ -1,18 +1,18 @@
 package com.example.carrental.controller;
 
-import com.example.carrental.DTO.BookingDTO;
-import com.example.carrental.model.BookingModel;
-import com.example.carrental.model.ReservationModel;
-import com.example.carrental.repository.CustomerRepository;
+import com.example.carrental.controller.DTO.BookingDTO;
+import com.example.carrental.controller.DTO.ReservationDTO;
+import com.example.carrental.repository.model.BookingModel;
 import com.example.carrental.repository.ReservationRepository;
+import com.example.carrental.repository.model.ReservationModel;
 import com.example.carrental.service.BookingService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.example.carrental.service.ReservationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,28 +21,31 @@ public class BookingController {
 
 
     private final BookingService bookingService;
-    private final ReservationRepository reservationRepository;
+    private final ReservationService reservationService;
 
-    @GetMapping
-    public List<BookingModel> getBookings() {
+
+
+    @GetMapping("/getall")
+    public List<BookingDTO> getBookings() {
         return bookingService.getAllBookings();
     }
 
-    @PostMapping()
-    public void addBooking(@RequestBody BookingDTO bookingDTO, @PathVariable Long id) {
+    @PostMapping("/add")
+    public UUID addBooking(@RequestBody BookingDTO bookingDTO, @PathVariable UUID id) {
         BookingModel bookingModel = bookingService.addBooking(bookingDTO);
-        reservationRepository.getReservationModelById(id).setBookingModel(bookingModel);
+//        ReservationDTO reservationDTO1 = reservationService.getReservationById(id);
+//        reservationService.addReservation(reservationDTO1);
+        return bookingModel.getId();
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteBookingById(@PathVariable("id") Long id) {
-        bookingService.deleteBooking(id);
+    @DeleteMapping("/delete/{id}")
+    public UUID deleteBookingById(@PathVariable("id") UUID id) {
+        return bookingService.deleteBooking(id);
     }
 
-    @PutMapping("/{id}")
-    public void editBooking(@PathVariable("id") Long id, @RequestBody BookingDTO bookingDTO) {
-        BookingModel bookingModel = bookingService.getBookingModelById(id);
-        bookingService.editBooking(bookingDTO, bookingModel);
+    @PutMapping("/edit/{id}")
+    public UUID editBooking(@PathVariable("id") UUID id, @RequestBody BookingDTO bookingDTO) {
+        return bookingService.editBooking(bookingDTO, id);
     }
 
 }
