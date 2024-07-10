@@ -2,10 +2,12 @@ package com.example.carrental.controller;
 
 import com.example.carrental.controller.DTO.BookingDTO;
 import com.example.carrental.controller.DTO.ReservationDTO;
+import com.example.carrental.repository.BookingRepository;
 import com.example.carrental.repository.model.BookingModel;
 import com.example.carrental.repository.ReservationRepository;
 import com.example.carrental.repository.model.ReservationModel;
 import com.example.carrental.service.BookingService;
+import com.example.carrental.service.CurrencyService;
 import com.example.carrental.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,8 @@ public class BookingController {
 
 
     private final BookingService bookingService;
-    private final ReservationService reservationService;
-
+    private final CurrencyService currencyService;
+    private final BookingRepository bookingRepository;
 
 
     @GetMapping("/getall")
@@ -32,10 +34,8 @@ public class BookingController {
 
     @PostMapping("/add")
     public UUID addBooking(@RequestBody BookingDTO bookingDTO, @PathVariable UUID id) {
-        BookingModel bookingModel = bookingService.addBooking(bookingDTO);
-//        ReservationDTO reservationDTO1 = reservationService.getReservationById(id);
-//        reservationService.addReservation(reservationDTO1);
-        return bookingModel.getId();
+        return bookingService.addBooking(bookingDTO, id);
+
     }
 
     @DeleteMapping("/delete/{id}")
@@ -47,5 +47,6 @@ public class BookingController {
     public UUID editBooking(@PathVariable("id") UUID id, @RequestBody BookingDTO bookingDTO) {
         return bookingService.editBooking(bookingDTO, id);
     }
+
 
 }

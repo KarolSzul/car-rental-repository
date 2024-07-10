@@ -46,6 +46,9 @@ public class CarModel {
     @Column(name = "price_per_day")
     private Double pricePerDay;
 
+    @Column(name="price_per_km")
+    private Double pricePerKm;
+
     @OneToMany(mappedBy = "carModel")
     private List<CarStatusHistoryModel> carStatusHistoryModels;
 

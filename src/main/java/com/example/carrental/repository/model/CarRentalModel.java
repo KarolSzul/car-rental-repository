@@ -28,10 +28,11 @@ public class CarRentalModel {
     @Size(max = 100, message = "{validation.name.size.too_long}")
     private String domain;
 
+
     @Column
     @Size(min = 2, message = "{validation.name.size.too_short}")
     @Size(max = 200, message = "{validation.name.size.too_long}")
-    private String address;
+    private String street;
 
     @Column
     @OneToMany

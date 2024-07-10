@@ -2,18 +2,17 @@ package com.example.carrental.controller;
 
 import com.example.carrental.controller.DTO.CarDTO;
 import com.example.carrental.controller.validation.CarDTOValidator;
-import com.example.carrental.repository.model.CarModel;
 import com.example.carrental.repository.model.CarStatus;
 import com.example.carrental.service.CarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,17 +34,28 @@ public class CarController {
         return carService.getAllCars();
     }
 
-    @GetMapping("/available")
-    public List<CarDTO> getAllAvailableCars(
+    @GetMapping("/getallmap")
+    public HashMap<CarDTO, Double> getCarsAsMap() {
+        return carService.getAllCarsAsMap();
+    }
+
+
+
+    @GetMapping("/available/currency={currency}/start={startDepartment}end={endDepartment}")
+    public List<CarService.CarWithPrice> getAllAvailableCars(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return carService.displayAllAvailableCars(startDate, endDate);
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @PathVariable("currency") String currency,
+            @PathVariable("startDepartment") String startDepartment,
+            @PathVariable("endDepartment") String endDepartment) {
+        return carService.getAllAvailableCars(startDate, endDate, currency, startDepartment, endDepartment);
     }
 
 
     @PostMapping("/add")
     public UUID addCar(@Valid @RequestBody CarDTO carDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
+//            throw new IllegalArgumentException(bindingResult.getFieldError("pricePerDay").getCode());
             throw new IllegalArgumentException("Invalid data input");
         }
         return carService.addCar(carDTO);
@@ -63,6 +73,15 @@ public class CarController {
             throw new IllegalArgumentException("Invalid data input");
         }
     return carService.editCar(id, carDTO);
+    }
+
+    @GetMapping("/test")
+    public HashMap<String, Double> test(){
+        HashMap<String, Double> result = new HashMap<>();
+        result.put("a", 1.0);
+        result.put("b", 2.0);
+        result.put("d", 3.0);
+        return result;
     }
 
 

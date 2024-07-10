@@ -29,6 +29,9 @@ public class CarMapper {
         if (carDTO.getPricePerDay() != null){
             carModel.setPricePerDay(carDTO.getPricePerDay());
         }
+        if (carDTO.getPricePerKm() != null){
+            carModel.setPricePerKm(carModel.getPricePerKm());
+        }
         if (carDTO.getCarRentalModel() != null){
             carModel.setCarRentalModel(carDTO.getCarRentalModel());
         }
@@ -43,6 +46,7 @@ public class CarMapper {
         carDTO.setMileage(carModel.getMileage());
         carDTO.setBodyType(carModel.getBodyType());
         carDTO.setPricePerDay(carModel.getPricePerDay());
+        carDTO.setPricePerKm(carModel.getPricePerKm());
         carDTO.setColor(carModel.getColor());
         carDTO.setYearOfProduction(carModel.getYearOfProduction());
         carDTO.setBrand(carModel.getBrand());

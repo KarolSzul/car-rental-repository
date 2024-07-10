@@ -1,6 +1,8 @@
 package com.example.carrental.service;
 
 import com.example.carrental.controller.DTO.BookingDTO;
+import com.example.carrental.repository.ReservationRepository;
+import com.example.carrental.repository.model.ReservationModel;
 import com.example.carrental.service.mapper.BookingMapper;
 import com.example.carrental.repository.model.BookingModel;
 import com.example.carrental.repository.BookingRepository;
@@ -18,13 +20,16 @@ public class BookingService {
     private final BookingRepository bookingRepository;
 
     private final BookingMapper bookingMapper;
+    private final ReservationRepository reservationRepository;
 
 
-    public BookingModel addBooking(BookingDTO bookingDTO) {
+    public UUID addBooking(BookingDTO bookingDTO, UUID id) {
         BookingModel newBooking = new BookingModel();
         bookingMapper.bookingDTOToBookingModel(bookingDTO, newBooking);
         bookingRepository.save(newBooking);
-        return newBooking;
+        ReservationModel reservationModel =reservationRepository.findById(id).orElse(null);
+        reservationModel.setBookingModel(newBooking);
+        return newBooking.getId();
     }
 
     public UUID deleteBooking(UUID id) {
@@ -54,6 +59,8 @@ public class BookingService {
         BookingModel bookingModel = bookingRepository.findById(id).orElse(null);
         return bookingMapper.bookingModelToBookingDTO(bookingModel);
     }
+
+
 
 
 }

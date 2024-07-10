@@ -19,10 +19,6 @@ public class CarRentalMapper {
         carRentalModel.setName(carRentalDTO.getName());
     }
 
-    if (carRentalDTO.getAddress() != null) {
-        carRentalModel.setAddress(carRentalDTO.getAddress());
-    }
-
 
     if (carRentalDTO.getDomain() != null) {
         carRentalModel.setDomain(carRentalDTO.getDomain());
@@ -38,7 +34,6 @@ public class CarRentalMapper {
 
     public CarRentalDTO carRentalModelToCarRentalDTO (CarRentalModel carRentalModel) {
         CarRentalDTO carRentalDTO = new CarRentalDTO();
-        carRentalDTO.setAddress(carRentalModel.getAddress());
         carRentalDTO.setLogotype(carRentalModel.getLogotype());
         carRentalDTO.setName(carRentalModel.getName());
         carRentalDTO.setDomain(carRentalModel.getDomain());

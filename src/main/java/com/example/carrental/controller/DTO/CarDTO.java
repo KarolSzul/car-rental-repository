@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarDTO {
+public class CarDTO implements Serializable {
 
     private String brand;
     private String model;
@@ -21,6 +23,7 @@ public class CarDTO {
     private Integer yearOfProduction;
     private Integer mileage;
     private Double pricePerDay;
+    private Double pricePerKm;
     private CarRentalModel carRentalModel;
 
 

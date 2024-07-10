@@ -9,8 +9,14 @@ import org.springframework.stereotype.Component;
 public class DepartmentMapper {
 
     public DepartmentModel departmentDTOToDepartmentModel(DepartmentDTO departmentDTO, DepartmentModel departmentModel){
-        if (departmentDTO.getDepartmentAddress() != null){
-            departmentModel.setDepartmentAddress(departmentDTO.getDepartmentAddress());
+        if (departmentDTO.getCity() != null){
+            departmentModel.setCity(departmentDTO.getCity());
+        }
+        if (departmentDTO.getStreet() != null) {
+            departmentModel.setStreet(departmentModel.getStreet());
+        }
+        if (departmentDTO.getAlias() != null) {
+            departmentModel.setAlias(departmentModel.getAlias());
         }
         if (departmentDTO.getCarRentalModel() != null){
             departmentModel.setCarRentalModel(departmentDTO.getCarRentalModel());
@@ -22,7 +28,9 @@ public class DepartmentMapper {
 
     public DepartmentDTO departmentModelToDepartmentDTO(DepartmentModel departmentModel) {
         DepartmentDTO departmentDTO = new DepartmentDTO();
-        departmentDTO.setDepartmentAddress(departmentModel.getDepartmentAddress());
+        departmentDTO.setStreet(departmentModel.getStreet());
+        departmentDTO.setCity(departmentModel.getCity());
+        departmentDTO.setAlias(departmentModel.getAlias());
         departmentDTO.setCarRentalModel(departmentModel.getCarRentalModel());
         return departmentDTO;
     }

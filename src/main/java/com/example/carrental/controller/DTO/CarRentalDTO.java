@@ -24,8 +24,6 @@ public class CarRentalDTO {
 
     private String domain;
 
-    private String address;
-
     private List<EmployeeModel> employeeModelList;
 
     private List<CarModel> carModelList;

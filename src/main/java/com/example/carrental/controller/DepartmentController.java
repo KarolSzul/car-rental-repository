@@ -24,7 +24,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/get/{id}")
-    public DepartmentDTO getDepartmentById(@PathVariable UUID id){
+    public DepartmentDTO getDepartmentById(@PathVariable("id") UUID id){
         return departmentService.getDepartmentDTOById(id);
     }
 

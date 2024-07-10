@@ -5,7 +5,6 @@ import com.example.carrental.controller.validation.ReturnDTOValidator;
 import com.example.carrental.repository.model.ReservationModel;
 import com.example.carrental.repository.model.ReturnModel;
 import com.example.carrental.repository.ReservationRepository;
-import com.example.carrental.service.BillingService;
 import com.example.carrental.service.ReservationService;
 import com.example.carrental.service.ReturnService;
 import jakarta.validation.Valid;
@@ -14,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Currency;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class ReturnController {
 
     private final ReturnService returnService;
-    private final BillingService billingService;
+
     private final ReturnDTOValidator returnDTOValidator;
 
     @InitBinder
@@ -57,9 +57,9 @@ public class ReturnController {
         return returnService.editReturn(returnDTO, id);
     }
 
-    @GetMapping("/getcost/{id}")
-    public Double getTotalCostOfRenting(@PathVariable("id") UUID id) {
-        return billingService.getFinalCost(id);
+    @GetMapping("/getcost/id={id}/currency={currency}")
+    public Double getTotalCostOfRenting(@PathVariable("id") UUID id, @PathVariable("currency") String currency) {
+        return returnService.getFinalCost(id, currency);
     }
 
 

@@ -21,6 +21,7 @@ public class ReturnService {
 
     private final ReturnMapper returnMapper;
     private final ReservationRepository reservationRepository;
+    private final CurrencyService currencyService;
 
     public List<ReturnDTO> getAllReturns() {
         return returnRepository
@@ -55,5 +56,15 @@ public class ReturnService {
         returnMapper.returnDTOToReturnModel(returnDTO, returnModel);
         returnRepository.save(returnModel);
         return id;
+    }
+
+    public Double getFinalCost(UUID id, String currency) {
+        ReservationModel reservationModel = reservationRepository.findById(id).orElse(null);
+        ReturnModel returnModel = returnRepository.getReturnModelByReservationId(id);
+        Double totalCost = reservationModel.getPrice() + returnModel.getExtraCharge();
+        if (currency.isEmpty()) {
+            return totalCost;
+        }
+        return currencyService.convertFromDollars(totalCost, currency);
     }
 }
