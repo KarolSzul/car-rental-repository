@@ -20,11 +20,12 @@ public class DepartmentModel {
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
-    @Column(unique = true)
+
     @Size(min = 3, message = "{validation.name.size.too_short}")
     @Size(max = 5, message = "{validation.name.size.too_long}")
     private String alias;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private City city;
 

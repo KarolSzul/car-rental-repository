@@ -12,7 +12,7 @@ import java.util.UUID;
 @Repository
 public interface DepartmentRepository extends JpaRepository<DepartmentModel, UUID> {
 
-    @Query("Select DepartmentModel from DepartmentModel d where d.alias = :alias")
+//    @Query("Select DepartmentModel from DepartmentModel d where d.alias = :alias")
     public DepartmentModel getByAlias (@Param("alias") String alias);
 
 }

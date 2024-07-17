@@ -36,6 +36,7 @@ public class CustomerModel {
     @ManyToOne
     @JoinColumn(name = "car_rental_id")
     private CarRentalModel carRentalModel;
+
     @OneToMany(mappedBy = "customerModel")
     private Set<ReservationModel> reservationModelSet;
 

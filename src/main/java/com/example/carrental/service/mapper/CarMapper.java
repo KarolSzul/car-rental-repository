@@ -30,7 +30,7 @@ public class CarMapper {
             carModel.setPricePerDay(carDTO.getPricePerDay());
         }
         if (carDTO.getPricePerKm() != null){
-            carModel.setPricePerKm(carModel.getPricePerKm());
+            carModel.setPricePerKm(carDTO.getPricePerKm());
         }
         if (carDTO.getCarRentalModel() != null){
             carModel.setCarRentalModel(carDTO.getCarRentalModel());

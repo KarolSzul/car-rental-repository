@@ -21,6 +21,7 @@ public class CarDTOValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "yearOfProduction", "field.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mileage", "field.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pricePerDay", "field.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pricePerKm", "field.required");
 
 
         CarDTO carDTO = (CarDTO) target;

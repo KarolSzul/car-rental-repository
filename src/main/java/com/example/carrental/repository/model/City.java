@@ -1,5 +1,6 @@
 package com.example.carrental.repository.model;
 
+
 public enum City {
 
     WROCLAW (51.107883, 17.038538),

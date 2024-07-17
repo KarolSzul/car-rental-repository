@@ -41,7 +41,7 @@ public class CarController {
 
 
 
-    @GetMapping("/available/currency={currency}/start={startDepartment}end={endDepartment}")
+    @GetMapping("/available/currency={currency}/start={startDepartment}/end={endDepartment}")
     public List<CarService.CarWithPrice> getAllAvailableCars(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,

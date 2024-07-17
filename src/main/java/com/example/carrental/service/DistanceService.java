@@ -14,8 +14,9 @@ public class DistanceService {
 
     public DepartmentRepository departmentRepository;
 
-    public DistanceService() {
+    public DistanceService(DepartmentRepository departmentRepository) {
         this.restTemplate = new RestTemplate();
+        this.departmentRepository = departmentRepository;
     }
 
     public String getUrl(Double startLatitude, Double startLongitude,
@@ -24,7 +25,7 @@ public class DistanceService {
                 "/json?origins=%s,%s&destinations=%s,%s" +
                 "&key=imJ4E7wnpOLLYLXlzWBGuqwvnmKfRScBwYoAHGI2gDWDqOoqWbMBOrzfNVkm7NQ2";
         return String.format(customUrl, startLatitude, startLongitude, endLatitude, endLongitude);
-    }
+    } // do properties
 
 
     public DistanceDTO getDistanceDTO() {

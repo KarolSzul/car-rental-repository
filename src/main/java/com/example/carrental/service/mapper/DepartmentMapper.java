@@ -13,10 +13,13 @@ public class DepartmentMapper {
             departmentModel.setCity(departmentDTO.getCity());
         }
         if (departmentDTO.getStreet() != null) {
-            departmentModel.setStreet(departmentModel.getStreet());
+            departmentModel.setStreet(departmentDTO.getStreet());
         }
         if (departmentDTO.getAlias() != null) {
-            departmentModel.setAlias(departmentModel.getAlias());
+            departmentModel.setAlias(departmentDTO.getAlias());
+        }
+        if (departmentDTO.getEmployeeModels() != null) {
+            departmentModel.setEmployeeModels(departmentDTO.getEmployeeModels());
         }
         if (departmentDTO.getCarRentalModel() != null){
             departmentModel.setCarRentalModel(departmentDTO.getCarRentalModel());
@@ -32,6 +35,7 @@ public class DepartmentMapper {
         departmentDTO.setCity(departmentModel.getCity());
         departmentDTO.setAlias(departmentModel.getAlias());
         departmentDTO.setCarRentalModel(departmentModel.getCarRentalModel());
+        departmentDTO.setEmployeeModels(departmentModel.getEmployeeModels());
         return departmentDTO;
     }
 
